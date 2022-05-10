@@ -26,5 +26,6 @@
     "import/resolver": {
       "typescript": {}
     }
-  }
+  },
+  "ignorePatterns": ["build/*", "node_modules/*"]
 }
