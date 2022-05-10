@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --transpile-only --exit-child --respawn --experimental-specifier-resolution=node --ignore-watch node_modules --watch src src/index.ts",
-    "build": "tsc && tsc-alias"
+    "build": "tsc && tsc-alias",
+    "start": "node build/src/index.js"
   },
   "author": "Demetrius Panovitch <demetrius.mp789@gmail.com>",
   "license": "ISC",
