@@ -10,15 +10,15 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "rootDir": ".",
-    "baseUrl": ".",
+    "rootDir": "./src",
+    "baseUrl": "./src",
     "paths": {
-      "$src/*": ["./src/*"],
-      "$controllers/*": ["./src/controllers/*"],
-      "$services/*": ["./src/services/*"],
-      "$routers/*": ["./src/routers/*"],
-      "$middlewares/*": ["./src/middlewares/*"],
-      "$lib/*": ["./src/lib/*"]
+      "$src/*": ["./*"],
+      "$controllers/*": ["./controllers/*"],
+      "$services/*": ["./services/*"],
+      "$routers/*": ["./routers/*"],
+      "$middlewares/*": ["./middlewares/*"],
+      "$lib/*": ["./lib/*"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },
