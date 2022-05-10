@@ -9,8 +9,14 @@ export type JwtPayloadType = {
 export default class AuthService {
   static HASH_ROUNDS = 10;
 
+  static SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+  static EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
+
+  static ALGORITHM = process.env.JWT_ALGORITHM || 'HS256';
+
   public static async generatePasswordHash(password: string): Promise<string> {
-    const hashedPassword = await bcrypt.hash(password, AuthService.HASH_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, this.HASH_ROUNDS);
 
     return hashedPassword;
   }
@@ -22,16 +28,16 @@ export default class AuthService {
   }
 
   public static generateJwt(payload: object): string {
-    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      algorithm: 'HS256',
-      expiresIn: '1d',
+    const token = jwt.sign(payload, this.SECRET_KEY, {
+      algorithm: this.ALGORITHM,
+      expiresIn: this.EXPIRES_IN,
     });
 
     return token;
   }
 
   public static verifyJwt(token: string): JwtPayloadType {
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY) as JwtPayloadType;
+    const payload = jwt.verify(token, this.SECRET_KEY) as JwtPayloadType;
 
     return payload;
   }

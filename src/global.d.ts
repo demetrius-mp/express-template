@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import { User } from '@prisma/client';
+import { Algorithm } from 'jsonwebtoken';
 
 declare global {
   declare namespace NodeJS {
@@ -8,6 +9,8 @@ declare global {
       NODE_ENV: 'development' | 'production';
       PORT?: number;
       JWT_SECRET_KEY: string;
+      JWT_EXPIRES_IN?: string;
+      JWT_ALGORITHM?: Algorithm;
     }
   }
 }
