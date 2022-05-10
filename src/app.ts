@@ -1,7 +1,7 @@
+import errorMiddleware from '$middlewares/error.middleware';
 import router from '$routers/index';
 import cors from 'cors';
 import express from 'express';
-import errorMiddleware from './middlewares/error.middleware';
 
 export default class App {
   private readonly app: express.Express;
