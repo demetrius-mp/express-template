@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma';
+import prisma from '$src/lib/prisma';
 import { body } from 'express-validator';
 
 async function isUniqueEmail(value: string) {

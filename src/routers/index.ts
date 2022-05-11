@@ -1,4 +1,4 @@
-import authRouter from '$routers/auth.router';
+import authRouter from '$src/routers/auth.router';
 import { Router } from 'express';
 
 const router = Router();

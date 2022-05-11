@@ -14,14 +14,7 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "$src/*": ["./*"],
-      "$controllers/*": ["./controllers/*"],
-      "$services/*": ["./services/*"],
-      "$routers/*": ["./routers/*"],
-      "$middlewares/*": ["./middlewares/*"],
-      "$validators/*": ["./validators/*"],
-      "$lib/*": ["./lib/*"],
-      "$types": ["./global.d.ts"]
+      "$src/*": ["./*"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },

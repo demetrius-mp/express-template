@@ -1,10 +1,10 @@
-import * as controller from '$controllers/auth.controller';
+import { authController } from '$src/controllers';
 import { Router } from 'express';
 
 const authRouter = Router();
 
-authRouter.post('/sign-up', controller.handleSignUp);
-authRouter.post('/sign-in', controller.handleSignIn);
-authRouter.get('/me', controller.handleMe);
+authRouter.post('/sign-up', authController.handleSignUp);
+authRouter.post('/sign-in', authController.handleSignIn);
+authRouter.get('/me', authController.handleMe);
 
 export default authRouter;

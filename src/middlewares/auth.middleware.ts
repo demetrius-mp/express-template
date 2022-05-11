@@ -1,5 +1,5 @@
-import prisma from '$lib/prisma';
-import AuthService from '$services/auth.service';
+import prisma from '$src/lib/prisma';
+import { AuthService } from '$src/services';
 import type { RequestHandler } from 'express';
 
 const middleware: RequestHandler = async (req, res, next) => {

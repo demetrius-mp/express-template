@@ -1,5 +1,5 @@
-import errorMiddleware from '$middlewares/error.middleware';
-import router from '$routers/index';
+import { errorMiddleware } from '$src/middlewares';
+import router from '$src/routers';
 import cors from 'cors';
 import express from 'express';
 
