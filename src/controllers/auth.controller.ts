@@ -1,9 +1,9 @@
 import prisma from '$lib/prisma';
 import authMiddleware from '$middlewares/auth.middleware';
 import AuthService from '$services/auth.service';
+import validationMiddleware from '$src/middlewares/validator.middleware';
 import { validateSignInBody, validateSignUpBody } from '$validators/auth.validator';
 import { RequestHandler } from 'express';
-import { validationResult } from 'express-validator';
 
 const signUp: RequestHandler = async (req, res) => {
   type ReqBody = {
@@ -11,11 +11,6 @@ const signUp: RequestHandler = async (req, res) => {
     email: string;
     password: string;
   };
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
 
   const { name, email, password }: ReqBody = req.body;
 
@@ -42,11 +37,6 @@ const signIn: RequestHandler = async (req, res) => {
     email: string;
     password: string;
   };
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
 
   const { email, password }: ReqBody = req.body;
 
@@ -78,6 +68,6 @@ const me: RequestHandler = async (req, res) => {
   res.status(200).json(req.user);
 };
 
-export const handleSignUp = [...validateSignUpBody, signUp];
-export const handleSignIn = [...validateSignInBody, signIn];
+export const handleSignUp = [validationMiddleware(validateSignUpBody), signUp];
+export const handleSignIn = [validationMiddleware(validateSignInBody), signIn];
 export const handleMe = [authMiddleware, me];
