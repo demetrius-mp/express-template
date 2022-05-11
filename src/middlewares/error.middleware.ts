@@ -1,5 +1,5 @@
 import { PrismaClientValidationError } from '@prisma/client/runtime';
-import { ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler } from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
 
 const errorMiddleware: ErrorRequestHandler = async (err, req, res, next) => {

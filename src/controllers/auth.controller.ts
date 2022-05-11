@@ -2,17 +2,18 @@ import prisma from '$lib/prisma';
 import authMiddleware from '$middlewares/auth.middleware';
 import AuthService from '$services/auth.service';
 import validationMiddleware from '$src/middlewares/validator.middleware';
+import type { RequestHandlerWithBody } from '$types';
 import { validateSignInBody, validateSignUpBody } from '$validators/auth.validator';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
-const signUp: RequestHandler = async (req, res) => {
-  type ReqBody = {
-    name: string;
-    email: string;
-    password: string;
-  };
+type SignUpBody = {
+  name: string;
+  email: string;
+  password: string;
+};
 
-  const { name, email, password }: ReqBody = req.body;
+const signUp: RequestHandlerWithBody<SignUpBody> = async (req, res) => {
+  const { name, email, password } = req.body;
 
   const hashedPassword = await AuthService.generatePasswordHash(password);
 
@@ -32,13 +33,13 @@ const signUp: RequestHandler = async (req, res) => {
   return res.status(201).json(createdUser);
 };
 
-const signIn: RequestHandler = async (req, res) => {
-  type ReqBody = {
-    email: string;
-    password: string;
-  };
+type SignInBody = {
+  email: string;
+  password: string;
+};
 
-  const { email, password }: ReqBody = req.body;
+const signIn: RequestHandlerWithBody<SignInBody> = async (req, res) => {
+  const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({
     where: {

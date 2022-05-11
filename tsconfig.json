@@ -5,6 +5,7 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,
+    "importsNotUsedAsValues": "error",
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -19,7 +20,8 @@
       "$routers/*": ["./routers/*"],
       "$middlewares/*": ["./middlewares/*"],
       "$validators/*": ["./validators/*"],
-      "$lib/*": ["./lib/*"]
+      "$lib/*": ["./lib/*"],
+      "$types": ["./global.d.ts"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },

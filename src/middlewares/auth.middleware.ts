@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma';
 import AuthService from '$services/auth.service';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 const middleware: RequestHandler = async (req, res, next) => {
   if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
