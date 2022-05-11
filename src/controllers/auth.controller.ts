@@ -1,7 +1,7 @@
 import prisma from '$lib/prisma';
 import authMiddleware from '$middlewares/auth.middleware';
 import AuthService from '$services/auth.service';
-import validationMiddleware from '$src/middlewares/validator.middleware';
+import validationMiddleware from '$src/middlewares/validation.middleware';
 import type { RequestHandlerWithBody } from '$types';
 import { validateSignInBody, validateSignUpBody } from '$validators/auth.validator';
 import type { RequestHandler } from 'express';
