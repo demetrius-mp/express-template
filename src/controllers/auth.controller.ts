@@ -2,7 +2,7 @@ import type { RequestHandlerWithBody } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { authMiddleware, validationMiddleware } from '$src/middlewares';
 import { AuthService } from '$src/services';
-import { validateSignInBody, validateSignUpBody } from '$src/validators/auth.validator';
+import { validateNewTokenBody, validateSignInBody, validateSignUpBody } from '$src/validators/auth.validator';
 import type { RequestHandler } from 'express';
 
 type SignUpBody = {
@@ -97,4 +97,4 @@ const me: RequestHandler = async (req, res) => {
 export const handleSignUp = [validationMiddleware(validateSignUpBody), signUp];
 export const handleSignIn = [validationMiddleware(validateSignInBody), signIn];
 export const handleMe = [authMiddleware(), me];
-export const handleNewToken = [newToken];
+export const handleNewToken = [validationMiddleware(validateNewTokenBody), newToken];

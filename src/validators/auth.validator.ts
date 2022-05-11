@@ -44,3 +44,9 @@ export const validateSignInBody = [
     .isLength({ min: 8 })
     .withMessage('Password must have at least 8 characters.'),
 ];
+
+export const validateNewTokenBody = [
+  body('token')
+    .isString()
+    .withMessage('Token must be a string.'),
+];
