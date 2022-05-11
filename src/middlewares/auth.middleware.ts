@@ -2,7 +2,7 @@ import prisma from '$lib/prisma';
 import AuthService from '$services/auth.service';
 import { RequestHandler } from 'express';
 
-const authMiddleware: RequestHandler = async (req, res, next) => {
+const middleware: RequestHandler = async (req, res, next) => {
   if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
@@ -29,4 +29,6 @@ const authMiddleware: RequestHandler = async (req, res, next) => {
   return next();
 };
 
-export default authMiddleware;
+export default function authMiddleware(): RequestHandler {
+  return middleware;
+}

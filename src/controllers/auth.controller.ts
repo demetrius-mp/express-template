@@ -70,4 +70,4 @@ const me: RequestHandler = async (req, res) => {
 
 export const handleSignUp = [validationMiddleware(validateSignUpBody), signUp];
 export const handleSignIn = [validationMiddleware(validateSignInBody), signIn];
-export const handleMe = [authMiddleware, me];
+export const handleMe = [authMiddleware(), me];
