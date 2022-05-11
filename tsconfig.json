@@ -11,14 +11,14 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "rootDir": "./src",
-    "baseUrl": "./src",
+    "rootDir": "./",
+    "baseUrl": "./",
     "paths": {
-      "$src/*": ["./*"]
+      "$src/*": ["./src/*"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "prisma/**/*.ts"],
   "exclude": ["./node_modules/*", "./build/*"],
   "ts-node": {
     "transpileOnly": true,

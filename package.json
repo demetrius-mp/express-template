@@ -8,7 +8,10 @@
     "clean": "rimraf build/",
     "prebuild": "npm run clean",
     "build": "tsc && tsc-alias",
-    "start": "node build/index.js"
+    "start": "node build/src/index.js"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "author": "Demetrius Panovitch <demetrius.mp789@gmail.com>",
   "license": "ISC",
