@@ -1,19 +1,17 @@
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import { ValidationChain, validationResult } from 'express-validator';
 
-const validationMiddleware = (validations: ValidationChain[]) => async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  await Promise.all(validations.map((validation) => validation.run(req)));
+export default function validationMiddleware(validations: ValidationChain[]) {
+  const middleware: RequestHandler = async (req, res, next) => {
+    await Promise.all(validations.map((validation) => validation.run(req)));
 
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  return next();
-};
+    return next();
+  };
 
-export default validationMiddleware;
+  return middleware;
+}
