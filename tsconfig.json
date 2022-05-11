@@ -18,6 +18,7 @@
       "$services/*": ["./services/*"],
       "$routers/*": ["./routers/*"],
       "$middlewares/*": ["./middlewares/*"],
+      "$validators/*": ["./validators/*"],
       "$lib/*": ["./lib/*"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]

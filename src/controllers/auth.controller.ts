@@ -1,27 +1,23 @@
 import prisma from '$lib/prisma';
+import authMiddleware from '$middlewares/auth.middleware';
 import AuthService from '$services/auth.service';
+import { validateSignInBody, validateSignUpBody } from '$validators/auth.validator';
 import { RequestHandler } from 'express';
+import { validationResult } from 'express-validator';
 
-export const signUp: RequestHandler = async (req, res) => {
+const signUp: RequestHandler = async (req, res) => {
   type ReqBody = {
     name: string;
     email: string;
     password: string;
   };
 
-  const { name, email, password }: ReqBody = req.body;
-
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  if (existingUser !== null) {
-    return res.status(400).json({
-      message: 'Email is already being used',
-    });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
+
+  const { name, email, password }: ReqBody = req.body;
 
   const hashedPassword = await AuthService.generatePasswordHash(password);
 
@@ -41,11 +37,17 @@ export const signUp: RequestHandler = async (req, res) => {
   return res.status(201).json(createdUser);
 };
 
-export const signIn: RequestHandler = async (req, res) => {
+const signIn: RequestHandler = async (req, res) => {
   type ReqBody = {
     email: string;
     password: string;
   };
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password }: ReqBody = req.body;
 
   const user = await prisma.user.findUnique({
@@ -72,6 +74,10 @@ export const signIn: RequestHandler = async (req, res) => {
   return res.status(200).json({ token });
 };
 
-export const me: RequestHandler = async (req, res) => {
+const me: RequestHandler = async (req, res) => {
   res.status(200).json(req.user);
 };
+
+export const handleSignUp = [...validateSignUpBody, signUp];
+export const handleSignIn = [...validateSignInBody, signIn];
+export const handleMe = [authMiddleware, me];
