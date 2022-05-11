@@ -16,11 +16,12 @@ declare global {
   }
 }
 
-declare module 'express-serve-static-core' {
-  export interface Request extends Express.Request {
-    user: User;
-  }
+interface CustomRequest extends Express.Request {
+  user: User;
+}
 
+declare module 'express-serve-static-core' {
+  export interface Request extends CustomRequest {}
 }
 
 export interface RequestHandlerWithParams<T> extends RequestHandler<T> {}
