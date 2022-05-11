@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { VerifyOptions } from 'jsonwebtoken';
 
 export type JwtPayloadType = {
   userId: User['id'];
@@ -36,8 +36,8 @@ export default class AuthService {
     return token;
   }
 
-  public static verifyJwt(token: string): JwtPayloadType {
-    const payload = jwt.verify(token, this.SECRET_KEY) as JwtPayloadType;
+  public static verifyJwt(token: string, options?: VerifyOptions): JwtPayloadType {
+    const payload = jwt.verify(token, this.SECRET_KEY, options) as JwtPayloadType;
 
     return payload;
   }

@@ -15,10 +15,6 @@ const middleware: RequestHandler = async (req, res, next) => {
     where: {
       id: payload.userId,
     },
-    select: {
-      email: true,
-      name: true,
-    },
   });
 
   if (user === null) {

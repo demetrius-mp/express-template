@@ -18,7 +18,7 @@ declare global {
 
 declare module 'express-serve-static-core' {
   export interface Request extends Express.Request {
-    user: Omit<User, 'id'|'password'>;
+    user: User;
   }
 
 }

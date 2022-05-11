@@ -64,6 +64,32 @@ const signIn: RequestHandlerWithBody<SignInBody> = async (req, res) => {
   return res.status(200).json({ token });
 };
 
+type NewTokenBody = {
+  token: string;
+}
+
+const newToken: RequestHandlerWithBody<NewTokenBody> = async (req, res) => {
+  const { token } = req.body;
+
+  const { userId } = AuthService.verifyJwt(token, {
+    ignoreExpiration: true,
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (user === null) {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+
+  const freshToken = AuthService.generateJwt({ userId: user.id });
+
+  return res.status(200).json({ token: freshToken });
+};
+
 const me: RequestHandler = async (req, res) => {
   res.status(200).json(req.user);
 };
@@ -71,3 +97,4 @@ const me: RequestHandler = async (req, res) => {
 export const handleSignUp = [validationMiddleware(validateSignUpBody), signUp];
 export const handleSignIn = [validationMiddleware(validateSignInBody), signIn];
 export const handleMe = [authMiddleware(), me];
+export const handleNewToken = [newToken];
