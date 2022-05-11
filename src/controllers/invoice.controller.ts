@@ -1,3 +1,4 @@
+import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
 import { validateCreateBody, validateReadManyParams } from '$src/validators/invoice.validator';
@@ -6,7 +7,7 @@ import type { RequestHandler } from 'express';
 
 type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'>
 
-const create: RequestHandler<{}, {}, CreateBody> = async (req, res) => {
+const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   const currentUser = req.user;
 
   const data = req.body;
@@ -25,7 +26,7 @@ interface ReadManyQuery {
   page: string
 }
 
-export const readMany: RequestHandler<{}, {}, {}, ReadManyQuery> = async (req, res) => {
+export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
   const currentUser = req.user;
 
   const page = parseInt(req.query.page, 10);

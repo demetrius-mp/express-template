@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import { User } from '@prisma/client';
 import { RequestHandler } from 'express';
+import type { ParamsDictionary, Query as QueryType } from 'express-serve-static-core';
 import { Algorithm } from 'jsonwebtoken';
 
 declare global {
@@ -24,9 +25,14 @@ declare module 'express-serve-static-core' {
   export interface Request extends CustomRequest {}
 }
 
-export interface RequestHandlerWithParams<T> extends RequestHandler<T> {}
-
-export interface RequestHandlerWithBody<T> extends RequestHandler<{}, {}, T> {}
-
-export interface RequestHandlerWithParamsAndBody<Params, Body>
-  extends RequestHandler<Params, {}, Body> {}
+// eslint-disable-next-line max-len
+export interface TypedRequestHandler<
+  Body = {},
+  Params = ParamsDictionary,
+  Query = QueryType
+> extends RequestHandler<
+  Params,
+  {},
+  Body,
+  Query
+> {}

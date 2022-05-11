@@ -1,4 +1,4 @@
-import type { RequestHandlerWithBody } from '$src/global';
+import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { authMiddleware, validationMiddleware } from '$src/middlewares';
 import { AuthService } from '$src/services';
@@ -11,7 +11,7 @@ type SignUpBody = {
   password: string;
 };
 
-const signUp: RequestHandlerWithBody<SignUpBody> = async (req, res) => {
+const signUp: TypedRequestHandler<SignUpBody, {t: number}> = async (req, res) => {
   const { name, email, password } = req.body;
 
   const hashedPassword = await AuthService.generatePasswordHash(password);
@@ -37,7 +37,7 @@ type SignInBody = {
   password: string;
 };
 
-const signIn: RequestHandlerWithBody<SignInBody> = async (req, res) => {
+const signIn: TypedRequestHandler<SignInBody> = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({
@@ -68,7 +68,7 @@ type NewTokenBody = {
   token: string;
 }
 
-const newToken: RequestHandlerWithBody<NewTokenBody> = async (req, res) => {
+const newToken: TypedRequestHandler<NewTokenBody> = async (req, res) => {
   const { token } = req.body;
 
   const { userId } = AuthService.verifyJwt(token, {
