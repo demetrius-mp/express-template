@@ -94,7 +94,22 @@ const me: RequestHandler = async (req, res) => {
   res.status(200).json(req.user);
 };
 
-export const handleSignUp = [validationMiddleware(validateSignUpBody), signUp];
-export const handleSignIn = [validationMiddleware(validateSignInBody), signIn];
-export const handleMe = [authMiddleware(), me];
-export const handleNewToken = [validationMiddleware(validateNewTokenBody), newToken];
+export const handleSignUp = [
+  validationMiddleware(validateSignUpBody),
+  signUp,
+] as RequestHandler[];
+
+export const handleSignIn = [
+  validationMiddleware(validateSignInBody),
+  signIn,
+] as RequestHandler[];
+
+export const handleMe = [
+  authMiddleware(),
+  me,
+] as RequestHandler[];
+
+export const handleNewToken = [
+  validationMiddleware(validateNewTokenBody),
+  newToken,
+] as RequestHandler[];
