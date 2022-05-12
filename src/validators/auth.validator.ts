@@ -6,6 +6,9 @@ async function isUniqueEmail(value: string) {
     where: {
       email: value,
     },
+    select: {
+      email: true,
+    },
   });
 
   if (user) {

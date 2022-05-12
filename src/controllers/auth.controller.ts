@@ -21,11 +21,7 @@ const signUp: TypedRequestHandler<SignUpBody, {t: number}> = async (req, res) =>
       email,
       password: hashedPassword,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
+    select: prisma.$exclude('user', ['password']),
   });
 
   return res.status(201).json(createdUser);
