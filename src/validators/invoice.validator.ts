@@ -36,6 +36,11 @@ export const validateReadManyQuery = [
     })
     .withMessage('Page must be a number greater than 0.')
     .toInt(10),
+  query('showArchived')
+    .optional()
+    .isBoolean()
+    .withMessage('Show archived must be a boolean.')
+    .toBoolean(),
 ];
 
 export const validateReadOneParams = [

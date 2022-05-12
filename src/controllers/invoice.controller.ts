@@ -4,7 +4,7 @@ import { validationMiddleware } from '$src/middlewares';
 import {
   validateArchiveParams, validateCreateBody, validateReadManyQuery, validateReadOneParams,
 } from '$src/validators/invoice.validator';
-import type { Invoice } from '@prisma/client';
+import type { Invoice, Prisma } from '@prisma/client';
 import type { RequestHandler } from 'express';
 
 type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'|'archived'>
@@ -36,6 +36,7 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
 
 type ReadManyQuery = {
   page?: number
+  showArchived?: boolean
 }
 
 export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
@@ -43,19 +44,35 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
 
   const page = req.query.page || 1;
   const ITEMS_PER_PAGE = 10;
+  const skip = (page - 1) * ITEMS_PER_PAGE;
+
+  const showArchived = req.query.showArchived || false;
+  let whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput>;
+  if (showArchived) {
+    whereClause = {
+      userId: currentUser.id,
+    };
+  } else {
+    whereClause = {
+      AND: [
+        {
+          userId: currentUser.id,
+        },
+        {
+          archived: false,
+        },
+      ],
+    };
+  }
 
   const invoices = await prisma.invoice.findMany({
-    where: {
-      userId: currentUser.id,
-    },
-    skip: (page - 1) * ITEMS_PER_PAGE,
+    where: whereClause,
+    skip,
     take: ITEMS_PER_PAGE,
   });
 
   const totalInvoices = await prisma.invoice.count({
-    where: {
-      userId: currentUser.id,
-    },
+    where: whereClause,
   });
 
   return res.json({
