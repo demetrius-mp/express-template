@@ -70,6 +70,17 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
     where: whereClause,
     skip,
     take: ITEMS_PER_PAGE,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      value: true,
+      dueDate: true,
+      archived: true,
+      categories: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
   const totalInvoices = await prisma.invoice.count({
@@ -102,7 +113,9 @@ export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) 
     return res.status(404).json({ message: 'Invoice not found' });
   }
 
-  return res.json(invoice);
+  const { userId, ...invoiceWithoutUserId } = invoice;
+
+  return res.json(invoiceWithoutUserId);
 };
 
 type ArchiveParams = {
