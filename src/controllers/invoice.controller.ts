@@ -9,6 +9,18 @@ import type { RequestHandler } from 'express';
 
 type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'|'archived'>
 
+const selectAllExceptUserId: Prisma.InvoiceSelect = {
+  id: true,
+  title: true,
+  description: true,
+  value: true,
+  dueDate: true,
+  archived: true,
+  categories: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
 const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   const currentUser = req.user;
 
@@ -19,17 +31,7 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
       ...data,
       userId: currentUser.id,
     },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      value: true,
-      dueDate: true,
-      archived: true,
-      categories: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: selectAllExceptUserId,
   });
 
   res.status(201).json(invoice);
@@ -48,39 +50,22 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const showArchived = req.query.showArchived || false;
-  let whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput>;
-  if (showArchived) {
-    whereClause = {
-      userId: currentUser.id,
-    };
-  } else {
-    whereClause = {
-      AND: [
-        {
-          userId: currentUser.id,
-        },
-        {
-          archived: false,
-        },
-      ],
-    };
-  }
+  const whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
+    AND: [
+      {
+        userId: currentUser.id,
+      },
+      {
+        archived: showArchived ? undefined : false,
+      },
+    ],
+  };
 
   const invoices = await prisma.invoice.findMany({
     where: whereClause,
     skip,
     take: ITEMS_PER_PAGE,
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      value: true,
-      dueDate: true,
-      archived: true,
-      categories: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: selectAllExceptUserId,
   });
 
   const totalInvoices = await prisma.invoice.count({
@@ -177,17 +162,7 @@ const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (req, res) =
     where: {
       id: invoice.id,
     },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      value: true,
-      dueDate: true,
-      archived: true,
-      categories: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: selectAllExceptUserId,
   });
 
   return res.json(updatedInvoice);
