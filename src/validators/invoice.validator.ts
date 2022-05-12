@@ -1,4 +1,4 @@
-import { body, query } from 'express-validator';
+import { body, param, query } from 'express-validator';
 
 export const validateCreateBody = [
   body('title')
@@ -25,10 +25,16 @@ export const validateCreateBody = [
     .withMessage('Due date must be a date with the following format: "YYYY-MM-DD".'),
 ];
 
-export const validateReadManyParams = [
+export const validateReadManyQuery = [
   query('page')
     .isInt({
       gt: 0,
     })
     .withMessage('Page must be a number greater than 0.'),
+];
+
+export const validateReadOneParams = [
+  param('id')
+    .isString()
+    .withMessage('Id must be a string.'),
 ];

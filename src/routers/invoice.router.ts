@@ -8,5 +8,6 @@ invoiceRouter.use(authMiddleware());
 
 invoiceRouter.post('/', invoiceController.handleCreate);
 invoiceRouter.get('/', invoiceController.handleReadMany);
+invoiceRouter.get('/:id', invoiceController.handleReadOne);
 
 export default invoiceRouter;

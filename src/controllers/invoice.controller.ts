@@ -1,7 +1,7 @@
 import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
-import { validateCreateBody, validateReadManyParams } from '$src/validators/invoice.validator';
+import { validateCreateBody, validateReadManyQuery, validateReadOneParams } from '$src/validators/invoice.validator';
 import type { Invoice } from '@prisma/client';
 import type { RequestHandler } from 'express';
 
@@ -22,7 +22,7 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   res.status(201).json(invoice);
 };
 
-interface ReadManyQuery {
+type ReadManyQuery = {
   page: string
 }
 
@@ -53,12 +53,39 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
   });
 };
 
+type ReadOneParams = {
+  id: string
+}
+
+export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) => {
+  const currentUser = req.user;
+
+  const { id } = req.params;
+
+  const invoice = await prisma.invoice.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (invoice === null || invoice.userId !== currentUser.id) {
+    return res.status(404).json({ message: 'Invoice not found' });
+  }
+
+  return res.json(invoice);
+};
+
 export const handleCreate = [
   validationMiddleware(validateCreateBody),
   create,
 ] as RequestHandler[];
 
 export const handleReadMany = [
-  validationMiddleware(validateReadManyParams),
+  validationMiddleware(validateReadManyQuery),
   readMany,
+] as RequestHandler[];
+
+export const handleReadOne = [
+  validationMiddleware(validateReadOneParams),
+  readOne,
 ] as RequestHandler[];
