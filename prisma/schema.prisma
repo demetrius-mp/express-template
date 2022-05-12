@@ -41,7 +41,9 @@ model Invoice {
 model Category {
   id String @id @default(uuid())
 
-  name     String                 @unique
+  name String @unique
+  slug String @unique
+
   invoices CategoriesOnInvoices[]
 }
 
