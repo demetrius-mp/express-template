@@ -26,13 +26,13 @@ model Invoice {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  categories Category[]
-
   title       String
   value       Float
   description String?
   dueDate     DateTime?
   archived    Boolean   @default(false)
+
+  categories CategoriesOnInvoices[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,7 +41,16 @@ model Invoice {
 model Category {
   id String @id @default(uuid())
 
-  name      String  @unique
+  name     String                 @unique
+  invoices CategoriesOnInvoices[]
+}
+
+model CategoriesOnInvoices {
   invoice   Invoice @relation(fields: [invoiceId], references: [id])
   invoiceId String
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([invoiceId, categoryId])
 }
