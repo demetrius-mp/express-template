@@ -17,19 +17,29 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
       ...data,
       userId: currentUser.id,
     },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      value: true,
+      dueDate: true,
+      categories: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
   res.status(201).json(invoice);
 };
 
 type ReadManyQuery = {
-  page: string
+  page?: number
 }
 
 export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
   const currentUser = req.user;
 
-  const page = parseInt(req.query.page, 10);
+  const page = req.query.page || 1;
   const ITEMS_PER_PAGE = 10;
 
   const invoices = await prisma.invoice.findMany({
