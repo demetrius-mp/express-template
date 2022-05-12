@@ -1,11 +1,13 @@
 import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
-import { validateCreateBody, validateReadManyQuery, validateReadOneParams } from '$src/validators/invoice.validator';
+import {
+  validateArchiveParams, validateCreateBody, validateReadManyQuery, validateReadOneParams,
+} from '$src/validators/invoice.validator';
 import type { Invoice } from '@prisma/client';
 import type { RequestHandler } from 'express';
 
-type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'>
+type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'|'archived'>
 
 const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   const currentUser = req.user;
@@ -85,6 +87,37 @@ export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) 
   return res.json(invoice);
 };
 
+type ArchiveParams = {
+  id: string
+}
+
+export const archive: TypedRequestHandler<{}, ArchiveParams> = async (req, res) => {
+  const currentUser = req.user;
+
+  const { id } = req.params;
+
+  const invoice = await prisma.invoice.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (invoice === null || invoice.userId !== currentUser.id) {
+    return res.status(404).json({ message: 'Invoice not found' });
+  }
+
+  await prisma.invoice.update({
+    data: {
+      archived: true,
+    },
+    where: {
+      id: invoice.id,
+    },
+  });
+
+  return res.sendStatus(204);
+};
+
 export const handleCreate = [
   validationMiddleware(validateCreateBody),
   create,
@@ -98,4 +131,9 @@ export const handleReadMany = [
 export const handleReadOne = [
   validationMiddleware(validateReadOneParams),
   readOne,
+] as RequestHandler[];
+
+export const handleArchive = [
+  validationMiddleware(validateArchiveParams),
+  archive,
 ] as RequestHandler[];

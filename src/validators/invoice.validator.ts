@@ -43,3 +43,9 @@ export const validateReadOneParams = [
     .isString()
     .withMessage('Id must be a string.'),
 ];
+
+export const validateArchiveParams = [
+  param('id')
+    .isString()
+    .withMessage('Id must be a string.'),
+];
