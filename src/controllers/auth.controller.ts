@@ -1,4 +1,3 @@
-import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { authMiddleware, validationMiddleware } from '$src/middlewares';
 import { AuthService } from '$src/services';

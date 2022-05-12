@@ -13,6 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "rootDir": "./",
     "baseUrl": "./",
+    "typeRoots": ["./src/global.d.ts"],
     "paths": {
       "$src/*": ["./src/*"]
     },

@@ -27,5 +27,13 @@
       "typescript": {}
     }
   },
-  "ignorePatterns": ["build/*", "node_modules/*"]
+  "ignorePatterns": ["build/*", "node_modules/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }

@@ -1,4 +1,3 @@
-import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
 import { validateIdInParams } from '$src/validators/common.validator';

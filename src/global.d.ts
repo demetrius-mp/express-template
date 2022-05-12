@@ -15,6 +15,17 @@ declare global {
       JWT_ALGORITHM?: Algorithm;
     }
   }
+
+  interface TypedRequestHandler<
+    Body = {},
+    Params = ParamsDictionary,
+    Query = QueryType
+  > extends RequestHandler<
+    Params,
+    {},
+    Body,
+    Query
+  > {}
 }
 
 interface CustomRequest extends Express.Request {
@@ -24,15 +35,3 @@ interface CustomRequest extends Express.Request {
 declare module 'express-serve-static-core' {
   export interface Request extends CustomRequest {}
 }
-
-// eslint-disable-next-line max-len
-export interface TypedRequestHandler<
-  Body = {},
-  Params = ParamsDictionary,
-  Query = QueryType
-> extends RequestHandler<
-  Params,
-  {},
-  Body,
-  Query
-> {}
