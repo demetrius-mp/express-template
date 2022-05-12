@@ -2,7 +2,7 @@ import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
 import { validateIdInParams } from '$src/validators/common.validator';
 import {
-  validateCreateBody, validateReadManyQuery,
+  validateCreateBody, validateReadManyQuery, validateUpdate,
 } from '$src/validators/invoice.validator';
 import type { Invoice, Prisma } from '@prisma/client';
 import type { RequestHandler } from 'express';
@@ -25,6 +25,7 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
       description: true,
       value: true,
       dueDate: true,
+      archived: true,
       categories: true,
       createdAt: true,
       updatedAt: true,
@@ -135,6 +136,50 @@ export const archive: TypedRequestHandler<{}, ArchiveParams> = async (req, res) 
   return res.sendStatus(204);
 };
 
+type UpdateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'>
+
+type UpdateParams = {
+  id: string
+}
+
+const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (req, res) => {
+  const currentUser = req.user;
+
+  const { id } = req.params;
+
+  const data = req.body;
+
+  const invoice = await prisma.invoice.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (invoice === null || invoice.userId !== currentUser.id) {
+    return res.status(404).json({ message: 'Invoice not found' });
+  }
+
+  const updatedInvoice = await prisma.invoice.update({
+    data,
+    where: {
+      id: invoice.id,
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      value: true,
+      dueDate: true,
+      archived: true,
+      categories: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return res.json(updatedInvoice);
+};
+
 export const handleCreate = [
   validationMiddleware(validateCreateBody),
   create,
@@ -153,4 +198,9 @@ export const handleReadOne = [
 export const handleArchive = [
   validationMiddleware(validateIdInParams),
   archive,
+] as RequestHandler[];
+
+export const handleUpdate = [
+  validationMiddleware(validateUpdate),
+  update,
 ] as RequestHandler[];

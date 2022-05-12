@@ -10,5 +10,6 @@ invoiceRouter.post('/', invoiceController.handleCreate);
 invoiceRouter.get('/', invoiceController.handleReadMany);
 invoiceRouter.get('/:id', invoiceController.handleReadOne);
 invoiceRouter.delete('/:id', invoiceController.handleArchive);
+invoiceRouter.put('/:id', invoiceController.handleUpdate);
 
 export default invoiceRouter;
