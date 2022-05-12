@@ -1,4 +1,5 @@
-import { body, param, query } from 'express-validator';
+import { body, query } from 'express-validator';
+import { validatePageInQuery } from './common.validator';
 
 export const validateCreateBody = [
   body('title')
@@ -29,28 +30,11 @@ export const validateCreateBody = [
 ];
 
 export const validateReadManyQuery = [
-  query('page')
-    .optional()
-    .isInt({
-      gt: 0,
-    })
-    .withMessage('Page must be a number greater than 0.')
-    .toInt(10),
+  ...validatePageInQuery,
+
   query('showArchived')
     .optional()
     .isBoolean()
     .withMessage('Show archived must be a boolean.')
     .toBoolean(),
-];
-
-export const validateReadOneParams = [
-  param('id')
-    .isString()
-    .withMessage('Id must be a string.'),
-];
-
-export const validateArchiveParams = [
-  param('id')
-    .isString()
-    .withMessage('Id must be a string.'),
 ];

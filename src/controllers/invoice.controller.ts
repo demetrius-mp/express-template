@@ -1,8 +1,9 @@
 import type { TypedRequestHandler } from '$src/global';
 import prisma from '$src/lib/prisma';
 import { validationMiddleware } from '$src/middlewares';
+import { validateIdInParams } from '$src/validators/common.validator';
 import {
-  validateArchiveParams, validateCreateBody, validateReadManyQuery, validateReadOneParams,
+  validateCreateBody, validateReadManyQuery,
 } from '$src/validators/invoice.validator';
 import type { Invoice, Prisma } from '@prisma/client';
 import type { RequestHandler } from 'express';
@@ -146,11 +147,11 @@ export const handleReadMany = [
 ] as RequestHandler[];
 
 export const handleReadOne = [
-  validationMiddleware(validateReadOneParams),
+  validationMiddleware(validateIdInParams),
   readOne,
 ] as RequestHandler[];
 
 export const handleArchive = [
-  validationMiddleware(validateArchiveParams),
+  validationMiddleware(validateIdInParams),
   archive,
 ] as RequestHandler[];
