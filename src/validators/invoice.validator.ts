@@ -27,6 +27,14 @@ export const validateCreateBody = [
     })
     .withMessage('Due date must be a date with the following format: "YYYY-MM-DD".')
     .toDate(),
+
+  body('categories')
+    .isArray()
+    .withMessage('Categories must be an array of strings.'),
+
+  body('categories.*')
+    .isString()
+    .withMessage('Categories must be an array of strings.'),
 ];
 
 export const validateReadManyQuery = [
