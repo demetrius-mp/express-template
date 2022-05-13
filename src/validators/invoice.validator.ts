@@ -40,6 +40,11 @@ export const validateCreateBody = [
 export const validateReadManyQuery = [
   ...validatePageInQuery,
 
+  query('query')
+    .optional()
+    .isString()
+    .withMessage('Query must be a string.'),
+
   query('showArchived')
     .optional()
     .isBoolean()

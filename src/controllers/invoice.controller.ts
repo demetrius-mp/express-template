@@ -26,6 +26,7 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
 };
 
 type ReadManyQuery = {
+  query?: string
   page?: number
   showArchived?: boolean
 }
@@ -37,16 +38,36 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
   const ITEMS_PER_PAGE = 10;
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
+  const { query } = req.query;
+
+  const filterByQueryClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = [
+    {
+      title: {
+        contains: query,
+      },
+    },
+    {
+      description: {
+        contains: query,
+      },
+    },
+  ];
+
   const showArchived = req.query.showArchived || false;
+  const filterByArchivedClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
+    archived: showArchived ? undefined : false,
+  };
+
+  const filterByUserId: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
+    userId: currentUser.id,
+  };
+
   const whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
     AND: [
-      {
-        userId: currentUser.id,
-      },
-      {
-        archived: showArchived ? undefined : false,
-      },
+      filterByUserId,
+      filterByArchivedClause,
     ],
+    OR: query ? filterByQueryClause : undefined,
   };
 
   const invoices = await prisma.invoice.findMany({
@@ -54,6 +75,9 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
     skip,
     take: ITEMS_PER_PAGE,
     select: prisma.$exclude('invoice', ['userId']),
+    orderBy: {
+      dueDate: 'desc',
+    },
   });
 
   const totalInvoices = await prisma.invoice.count({
