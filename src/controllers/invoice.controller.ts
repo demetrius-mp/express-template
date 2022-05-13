@@ -29,6 +29,7 @@ type ReadManyQuery = {
   query?: string
   page?: number
   showArchived?: boolean
+  filterBy?: ('title' | 'description' | 'categories')[];
 }
 
 export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
@@ -40,21 +41,30 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
 
   const { query } = req.query;
 
-  const filterByQueryClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = [
+  const { filterBy } = req.query;
+
+  const stringFilter: Prisma.StringFilter = {
+    contains: query,
+  };
+
+  const arrayFilter: Prisma.StringNullableListFilter = {
+    has: query,
+  };
+
+  const filterByQuery: Prisma.Enumerable<Prisma.InvoiceWhereInput> = [
     {
-      title: {
-        contains: query,
-      },
+      title: filterBy && filterBy.includes('title') ? stringFilter : undefined,
     },
     {
-      description: {
-        contains: query,
-      },
+      description: filterBy && filterBy.includes('description') ? stringFilter : undefined,
+    },
+    {
+      categories: filterBy && filterBy.includes('categories') ? arrayFilter : undefined,
     },
   ];
 
   const showArchived = req.query.showArchived || false;
-  const filterByArchivedClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
+  const filterByArchived: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
     archived: showArchived ? undefined : false,
   };
 
@@ -65,9 +75,9 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
   const whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
     AND: [
       filterByUserId,
-      filterByArchivedClause,
+      filterByArchived,
     ],
-    OR: query ? filterByQueryClause : undefined,
+    OR: query ? filterByQuery : undefined,
   };
 
   const invoices = await prisma.invoice.findMany({

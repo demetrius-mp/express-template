@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { body, query } from 'express-validator';
 import { validateIdInParams, validatePageInQuery } from './common.validator';
 
@@ -40,16 +41,31 @@ export const validateCreateBody = [
 export const validateReadManyQuery = [
   ...validatePageInQuery,
 
-  query('query')
-    .optional()
-    .isString()
-    .withMessage('Query must be a string.'),
-
   query('showArchived')
     .optional()
     .isBoolean()
     .withMessage('Show archived must be a boolean.')
     .toBoolean(),
+
+  query('query')
+    .if(query('filterBy').exists())
+    .notEmpty()
+    .isString()
+    .withMessage('Query must be a string.'),
+
+  query('filterBy')
+    .if(query('query').exists())
+    .notEmpty()
+    .isLength({
+      min: 1,
+    })
+    .withMessage('Filter by must be an array of strings. Available filters: title, description, categories.'),
+
+  query('filterBy.*')
+    .if(query('query').exists())
+    .notEmpty()
+    .isIn(['title', 'description', 'categories'])
+    .withMessage('Filter by must be an array of strings. Available filters: title, description, categories.'),
 ];
 
 export const validateUpdate = [
