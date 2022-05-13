@@ -32,7 +32,7 @@ model Invoice {
   dueDate     DateTime?
   archived    Boolean   @default(false)
 
-  categories CategoriesOnInvoices[]
+  categories Category[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,15 +44,5 @@ model Category {
   name String @unique
   slug String @unique
 
-  invoices CategoriesOnInvoices[]
-}
-
-model CategoriesOnInvoices {
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId String
-
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
-
-  @@id([invoiceId, categoryId])
+  invoices Invoice[]
 }
