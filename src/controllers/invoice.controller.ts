@@ -25,11 +25,13 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   res.status(201).json(invoice);
 };
 
+type ReadManyQueryFilterBy = 'title' | 'description' | 'categories';
+
 type ReadManyQuery = {
   query?: string
   page?: number
   showArchived?: boolean
-  filterBy?: ('title' | 'description' | 'categories')[];
+  filterBy?: ReadManyQueryFilterBy[] | ReadManyQueryFilterBy;
 }
 
 export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
