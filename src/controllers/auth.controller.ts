@@ -1,8 +1,12 @@
-import prisma from '$src/lib/prisma';
-import { authMiddleware, validationMiddleware } from '$src/middlewares';
-import { AuthService } from '$src/services';
-import { validateNewTokenBody, validateSignInBody, validateSignUpBody } from '$src/validators/auth.validator';
-import type { RequestHandler } from 'express';
+import prisma from "$src/lib/prisma";
+import { authMiddleware, validationMiddleware } from "$src/middlewares";
+import { AuthService } from "$src/services";
+import {
+  validateNewTokenBody,
+  validateSignInBody,
+  validateSignUpBody,
+} from "$src/validators/auth.validator";
+import type { RequestHandler } from "express";
 
 type SignUpBody = {
   name: string;
@@ -10,7 +14,10 @@ type SignUpBody = {
   password: string;
 };
 
-const signUp: TypedRequestHandler<SignUpBody, {t: number}> = async (req, res) => {
+const signUp: TypedRequestHandler<SignUpBody, { t: number }> = async (
+  req,
+  res
+) => {
   const { name, email, password } = req.body;
 
   const hashedPassword = await AuthService.generatePasswordHash(password);
@@ -21,7 +28,7 @@ const signUp: TypedRequestHandler<SignUpBody, {t: number}> = async (req, res) =>
       email,
       password: hashedPassword,
     },
-    select: prisma.$exclude('user', ['password']),
+    select: prisma.$exclude("user", ["password"]),
   });
 
   return res.status(201).json(createdUser);
@@ -42,16 +49,16 @@ const signIn: TypedRequestHandler<SignInBody> = async (req, res) => {
   });
 
   if (user === null) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 
   const passwordIsValid = await AuthService.verifyPassword(
     password,
-    user.password,
+    user.password
   );
 
   if (!passwordIsValid) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 
   const token = AuthService.generateJwt({ userId: user.id });
@@ -61,7 +68,7 @@ const signIn: TypedRequestHandler<SignInBody> = async (req, res) => {
 
 type NewTokenBody = {
   token: string;
-}
+};
 
 const newToken: TypedRequestHandler<NewTokenBody> = async (req, res) => {
   const { token } = req.body;
@@ -77,7 +84,7 @@ const newToken: TypedRequestHandler<NewTokenBody> = async (req, res) => {
   });
 
   if (user === null) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 
   const freshToken = AuthService.generateJwt({ userId: user.id });
@@ -99,10 +106,7 @@ export const handleSignIn = [
   signIn,
 ] as RequestHandler[];
 
-export const handleMe = [
-  authMiddleware(),
-  me,
-] as RequestHandler[];
+export const handleMe = [authMiddleware(), me] as RequestHandler[];
 
 export const handleNewToken = [
   validationMiddleware(validateNewTokenBody),

@@ -1,5 +1,5 @@
-import prisma from '$src/lib/prisma';
-import { body } from 'express-validator';
+import prisma from "$src/lib/prisma";
+import { body } from "express-validator";
 
 async function isUniqueEmail(value: string) {
   const user = await prisma.user.findUnique({
@@ -12,44 +12,39 @@ async function isUniqueEmail(value: string) {
   });
 
   if (user) {
-    return Promise.reject(Error('Email already in use.'));
+    return Promise.reject(Error("Email already in use."));
   }
 
   return Promise.resolve();
 }
 
 export const validateSignUpBody = [
-  body('name')
+  body("name")
     .isString()
-    .withMessage('Name must be a string.')
+    .withMessage("Name must be a string.")
     .isLength({ min: 3 })
-    .withMessage('Name must have at least 3 characters.'),
+    .withMessage("Name must have at least 3 characters."),
 
-  body('email')
+  body("email")
     .isEmail()
-    .withMessage('Invalid email.')
+    .withMessage("Invalid email.")
     .normalizeEmail()
     .custom(isUniqueEmail)
-    .withMessage('Email already in use.'),
+    .withMessage("Email already in use."),
 
-  body('password')
+  body("password")
     .isLength({ min: 8 })
-    .withMessage('Password must have at least 8 characters.'),
+    .withMessage("Password must have at least 8 characters."),
 ];
 
 export const validateSignInBody = [
-  body('email')
-    .isEmail()
-    .withMessage('Invalid email.')
-    .normalizeEmail(),
+  body("email").isEmail().withMessage("Invalid email.").normalizeEmail(),
 
-  body('password')
+  body("password")
     .isLength({ min: 8 })
-    .withMessage('Password must have at least 8 characters.'),
+    .withMessage("Password must have at least 8 characters."),
 ];
 
 export const validateNewTokenBody = [
-  body('token')
-    .isString()
-    .withMessage('Token must be a string.'),
+  body("token").isString().withMessage("Token must be a string."),
 ];

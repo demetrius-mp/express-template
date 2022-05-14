@@ -1,13 +1,18 @@
-import prisma from '$src/lib/prisma';
-import { validationMiddleware } from '$src/middlewares';
-import { validateIdInParams } from '$src/validators/common.validator';
+import prisma from "$src/lib/prisma";
+import { validationMiddleware } from "$src/middlewares";
+import { validateIdInParams } from "$src/validators/common.validator";
 import {
-  validateCreateBody, validateReadManyQuery, validateUpdate,
-} from '$src/validators/invoice.validator';
-import type { Invoice, Prisma } from '@prisma/client';
-import type { RequestHandler } from 'express';
+  validateCreateBody,
+  validateReadManyQuery,
+  validateUpdate,
+} from "$src/validators/invoice.validator";
+import type { Invoice, Prisma } from "@prisma/client";
+import type { RequestHandler } from "express";
 
-type CreateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'|'archived'>
+type CreateBody = Omit<
+  Invoice,
+  "id" | "userId" | "createdAt" | "updatedAt" | "archived"
+>;
 
 const create: TypedRequestHandler<CreateBody> = async (req, res) => {
   const currentUser = req.user;
@@ -19,22 +24,25 @@ const create: TypedRequestHandler<CreateBody> = async (req, res) => {
       ...data,
       userId: currentUser.id,
     },
-    select: prisma.$exclude('invoice', ['userId']),
+    select: prisma.$exclude("invoice", ["userId"]),
   });
 
   res.status(201).json(invoice);
 };
 
-type ReadManyQueryFilterBy = 'title' | 'description' | 'categories';
+type ReadManyQueryFilterBy = "title" | "description" | "categories";
 
 type ReadManyQuery = {
-  query?: string
-  page?: number
-  showArchived?: boolean
+  query?: string;
+  page?: number;
+  showArchived?: boolean;
   filterBy?: ReadManyQueryFilterBy[] | ReadManyQueryFilterBy;
-}
+};
 
-export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, res) => {
+export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (
+  req,
+  res
+) => {
   const currentUser = req.user;
 
   const page = req.query.page || 1;
@@ -55,13 +63,15 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
 
   const filterByQuery: Prisma.Enumerable<Prisma.InvoiceWhereInput> = [
     {
-      title: filterBy && filterBy.includes('title') ? stringFilter : undefined,
+      title: filterBy && filterBy.includes("title") ? stringFilter : undefined,
     },
     {
-      description: filterBy && filterBy.includes('description') ? stringFilter : undefined,
+      description:
+        filterBy && filterBy.includes("description") ? stringFilter : undefined,
     },
     {
-      categories: filterBy && filterBy.includes('categories') ? arrayFilter : undefined,
+      categories:
+        filterBy && filterBy.includes("categories") ? arrayFilter : undefined,
     },
   ];
 
@@ -75,10 +85,7 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
   };
 
   const whereClause: Prisma.Enumerable<Prisma.InvoiceWhereInput> = {
-    AND: [
-      filterByUserId,
-      filterByArchived,
-    ],
+    AND: [filterByUserId, filterByArchived],
     OR: query ? filterByQuery : undefined,
   };
 
@@ -86,9 +93,9 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
     where: whereClause,
     skip,
     take: ITEMS_PER_PAGE,
-    select: prisma.$exclude('invoice', ['userId']),
+    select: prisma.$exclude("invoice", ["userId"]),
     orderBy: {
-      dueDate: 'desc',
+      dueDate: "desc",
     },
   });
 
@@ -104,10 +111,13 @@ export const readMany: TypedRequestHandler<{}, {}, ReadManyQuery> = async (req, 
 };
 
 type ReadOneParams = {
-  id: string
-}
+  id: string;
+};
 
-export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) => {
+export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (
+  req,
+  res
+) => {
   const currentUser = req.user;
 
   const { id } = req.params;
@@ -119,7 +129,7 @@ export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) 
   });
 
   if (invoice === null || invoice.userId !== currentUser.id) {
-    return res.status(404).json({ message: 'Invoice not found' });
+    return res.status(404).json({ message: "Invoice not found" });
   }
 
   const { userId, ...invoiceWithoutUserId } = invoice;
@@ -128,10 +138,13 @@ export const readOne: TypedRequestHandler<{}, ReadOneParams> = async (req, res) 
 };
 
 type ArchiveParams = {
-  id: string
-}
+  id: string;
+};
 
-export const archive: TypedRequestHandler<{}, ArchiveParams> = async (req, res) => {
+export const archive: TypedRequestHandler<{}, ArchiveParams> = async (
+  req,
+  res
+) => {
   const currentUser = req.user;
 
   const { id } = req.params;
@@ -143,7 +156,7 @@ export const archive: TypedRequestHandler<{}, ArchiveParams> = async (req, res) 
   });
 
   if (invoice === null || invoice.userId !== currentUser.id) {
-    return res.status(404).json({ message: 'Invoice not found' });
+    return res.status(404).json({ message: "Invoice not found" });
   }
 
   await prisma.invoice.update({
@@ -158,13 +171,16 @@ export const archive: TypedRequestHandler<{}, ArchiveParams> = async (req, res) 
   return res.sendStatus(204);
 };
 
-type UpdateBody = Omit<Invoice, 'id'|'userId'|'createdAt'|'updatedAt'>
+type UpdateBody = Omit<Invoice, "id" | "userId" | "createdAt" | "updatedAt">;
 
 type UpdateParams = {
-  id: string
-}
+  id: string;
+};
 
-const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (req, res) => {
+const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (
+  req,
+  res
+) => {
   const currentUser = req.user;
 
   const { id } = req.params;
@@ -178,7 +194,7 @@ const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (req, res) =
   });
 
   if (invoice === null || invoice.userId !== currentUser.id) {
-    return res.status(404).json({ message: 'Invoice not found' });
+    return res.status(404).json({ message: "Invoice not found" });
   }
 
   const updatedInvoice = await prisma.invoice.update({
@@ -186,7 +202,7 @@ const update: TypedRequestHandler<UpdateBody, UpdateParams> = async (req, res) =
     where: {
       id: invoice.id,
     },
-    select: prisma.$exclude('invoice', ['userId']),
+    select: prisma.$exclude("invoice", ["userId"]),
   });
 
   return res.json(updatedInvoice);
