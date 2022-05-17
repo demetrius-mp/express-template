@@ -11,6 +11,7 @@ const middleware: RequestHandler = async (req, res, next) => {
       where: {
         email: "mail@mail.com",
       },
+      select: prisma.$exclude("user", ["password"]),
     });
 
     if (user === null) {
@@ -36,6 +37,7 @@ const middleware: RequestHandler = async (req, res, next) => {
     where: {
       id: payload.userId,
     },
+    select: prisma.$exclude("user", ["password"]),
   });
 
   if (user === null) {

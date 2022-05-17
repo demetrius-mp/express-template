@@ -28,7 +28,7 @@ declare global {
 }
 
 interface CustomRequest extends Express.Request {
-  user: User;
+  user: Omit<User, "password">;
 }
 
 declare module "express-serve-static-core" {
