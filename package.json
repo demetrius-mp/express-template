@@ -9,7 +9,9 @@
     "prebuild": "npm run clean",
     "build": "tsc && tsc-alias",
     "start": "node build/src/index.js",
-    "lint": "eslint --fix src/"
+    "lint": "eslint --fix src/",
+    "docker:start": "docker compose up -d",
+    "docker:migrate": "docker compose -f docker-compose.migrate.yml up -d"
   },
   "prisma": {
     "seed": "ts-node src/lib/databaseSeed.ts"
