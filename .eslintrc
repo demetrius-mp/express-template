@@ -26,9 +26,9 @@
     "@typescript-eslint/no-dupe-class-members": ["error"],
     "no-useless-constructor": "off",
     "@typescript-eslint/no-useless-constructor": ["error"],
-    "no-unused-vars": "off",
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": ["error"],
+    "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
