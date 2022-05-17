@@ -12,7 +12,7 @@
     "lint": "eslint --fix src/"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node src/lib/databaseSeed.ts"
   },
   "author": "Demetrius Panovitch <demetrius.mp789@gmail.com>",
   "license": "ISC",

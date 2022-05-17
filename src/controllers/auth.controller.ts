@@ -1,6 +1,6 @@
 import prisma from "$src/lib/prisma";
 import { authMiddleware, validationMiddleware } from "$src/middlewares";
-import { AuthService } from "$src/services";
+import { AuthService, UserService } from "$src/services";
 import {
   validateNewTokenBody,
   validateSignInBody,
@@ -20,16 +20,8 @@ const signUp: TypedRequestHandler<SignUpBody, { t: number }> = async (
 ) => {
   const { name, email, password } = req.body;
 
-  const hashedPassword = await AuthService.generatePasswordHash(password);
-
-  const createdUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-    },
-    select: prisma.$exclude("user", ["password"]),
-  });
+  const userService = new UserService(prisma);
+  const createdUser = await userService.create({ name, email, password });
 
   return res.status(201).json(createdUser);
 };
@@ -42,11 +34,8 @@ type SignInBody = {
 const signIn: TypedRequestHandler<SignInBody> = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const userService = new UserService(prisma);
+  const user = await userService.findByEmail(email, true);
 
   if (user === null) {
     return res.status(401).json({ message: "Invalid credentials" });
@@ -77,11 +66,8 @@ const newToken: TypedRequestHandler<NewTokenBody> = async (req, res) => {
     ignoreExpiration: true,
   });
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+  const userService = new UserService(prisma);
+  const user = await userService.findById(userId);
 
   if (user === null) {
     return res.status(401).json({ message: "Invalid credentials" });

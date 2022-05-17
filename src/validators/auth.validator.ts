@@ -1,15 +1,10 @@
 import prisma from "$src/lib/prisma";
+import { UserService } from "$src/services";
 import { body } from "express-validator";
 
 async function isUniqueEmail(value: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: value,
-    },
-    select: {
-      email: true,
-    },
-  });
+  const userService = new UserService(prisma);
+  const user = await userService.findByEmail(value);
 
   if (user) {
     return Promise.reject(Error("Email already in use."));
