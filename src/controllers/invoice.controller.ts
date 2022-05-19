@@ -1,3 +1,6 @@
+import type { Invoice, Prisma } from "@prisma/client";
+import type { RequestHandler } from "express";
+
 import prisma from "$src/lib/prisma";
 import { validationMiddleware } from "$src/middlewares";
 import { validateIdInParams } from "$src/validators/common.validator";
@@ -6,8 +9,6 @@ import {
   validateReadManyQuery,
   validateUpdate,
 } from "$src/validators/invoice.validator";
-import type { Invoice, Prisma } from "@prisma/client";
-import type { RequestHandler } from "express";
 
 type CreateBody = Omit<
   Invoice,

@@ -1,5 +1,7 @@
-import { excludePrismaFields } from "$src/lib/prisma";
 import type { PrismaClient, User } from "@prisma/client";
+
+import { excludePrismaFields } from "$src/lib/prisma";
+
 import AuthService from "./auth.service";
 
 type CreateUser = {

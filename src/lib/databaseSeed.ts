@@ -1,5 +1,6 @@
-import { UserService } from "$src/services";
 import { PrismaClient } from "@prisma/client";
+
+import { UserService } from "$src/services";
 
 const prisma = new PrismaClient();
 

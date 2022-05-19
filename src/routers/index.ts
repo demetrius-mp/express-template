@@ -1,6 +1,7 @@
+import { Router } from "express";
+
 import authRouter from "$src/routers/auth.router";
 import invoiceRouter from "$src/routers/invoice.router";
-import { Router } from "express";
 
 const router = Router();
 

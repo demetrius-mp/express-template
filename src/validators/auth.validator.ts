@@ -1,6 +1,7 @@
+import { body } from "express-validator";
+
 import prisma from "$src/lib/prisma";
 import { UserService } from "$src/services";
-import { body } from "express-validator";
 
 async function isUniqueEmail(value: string) {
   const userService = new UserService(prisma);

@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { body, query } from "express-validator";
+
 import { validateIdInParams, validatePageInQuery } from "./common.validator";
 
 export const validateCreateBody = [
