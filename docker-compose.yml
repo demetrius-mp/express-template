@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   db:
-    image: postgres:latest
+    image: postgres:14.3-alpine
     restart: unless-stopped
 
     volumes:
@@ -14,12 +14,21 @@ services:
 
     ports:
       - "5432:5432"
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+      start_period: 2s
+
   web:
     stdin_open: true
     restart: unless-stopped
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
     build:
       context: .
@@ -32,7 +41,9 @@ services:
       - "${PORT}:${PORT}"
 
     env_file:
-      - .env
+      - .env.docker
+
+    command: sh -c "npx prisma migrate dev && npm run dev"
 
 volumes:
   postgres-data:

@@ -1,14 +1,10 @@
-FROM node:alpine
+FROM node:16.15.0-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-
-COPY prisma ./prisma/
-
-COPY tsconfig.json ./
-
 COPY . .
+
+RUN npm install -g npm@8.10.0
 
 RUN npm install
 

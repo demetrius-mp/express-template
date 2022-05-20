@@ -1,9 +1,13 @@
 {
   "editor.formatOnSave": true,
   "material-icon-theme.files.associations": {
+    "*.env.docker": "tune",
     "docker-compose.migrate.yml": "docker",
     "Dockerfile.*": "docker",
     "*.service.ts": "typescript"
+  },
+  "files.associations": {
+    "*.env.docker": "env"
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
@@ -30,7 +34,7 @@
     "*.tsx": "${capture}.ts",
     "package.json": "package-lock.json, yarn.lock, tsconfig.json, .eslintrc",
     "Dockerfile": "docker-compose.yml, .dockerignore, Dockerfile.*, docker-compose.*.yml",
-    ".env": ".env.example"
+    ".env": ".env.example, .env.docker"
   },
   "[dockercompose]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"

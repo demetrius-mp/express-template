@@ -53,5 +53,9 @@
     "jsonwebtoken": "^8.5.1",
     "prisma": "^3.11.1",
     "prisma-exclude": "^1.0.2"
+  },
+  "engines": {
+    "node": "16.15.0",
+    "npm": "8.10.0"
   }
 }
