@@ -11,8 +11,7 @@
     "start": "node build/src/index.js",
     "lint": "eslint \"src/**\"",
     "lint:fix": "eslint --fix \"src/**\"",
-    "docker:start": "docker compose up",
-    "docker:migrate": "docker compose -f docker-compose.migrate.yml up"
+    "docker": "docker compose --env-file .env.docker up"
   },
   "prisma": {
     "seed": "ts-node src/lib/databaseSeed.ts"
