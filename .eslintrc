@@ -19,28 +19,7 @@
   },
   "plugins": ["@typescript-eslint", "simple-import-sort", "import", "prettier"],
   "rules": {
-    // fix required .ts extension on imports
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never"
-      }
-    ],
     "prettier/prettier": "error",
-    // "no-dupe-class-members": "off",
-    // "@typescript-eslint/no-dupe-class-members": ["error"],
-    // "no-useless-constructor": "off",
-    // "@typescript-eslint/no-useless-constructor": ["error"],
-    // "no-empty-function": "off",
-    // "@typescript-eslint/no-empty-function": ["error"],
-    // "no-unused-vars": "off",
-    // "@typescript-eslint/no-unused-vars": [
-    //   "error",
-    //   {
-    //     "ignoreRestSiblings": true
-    //   }
-    // ],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error"
   },
@@ -49,13 +28,5 @@
       "typescript": {}
     }
   },
-  "ignorePatterns": ["build/*", "node_modules/*"],
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "rules": {
-        "no-undef": "off"
-      }
-    }
-  ]
+  "ignorePatterns": ["build/*", "node_modules/*"]
 }
