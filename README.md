@@ -8,7 +8,7 @@ Gerenciador de pacotes: NPM v8.10.0.
 
 ## Dependências externas
 
-É necessária uma string de conexão com um banco de dados PostgreSQL v14.2.
+É necessária uma string de conexão com um banco de dados PostgreSQL v14.3.
 Para o ambiente de desenvolvimento, é recomendada a utilização de um container PostgreSQL no [Docker](https://hub.docker.com/_/postgres).
 Outra alternativa para utilizar o PostgreSQL tem instalar nada localmente, é criar um projeto no [Heroku](https://devcenter.heroku.com/articles/heroku-postgresql) com um banco PostgreSQL, e utilizar a string fornecida por eles.
 
@@ -72,9 +72,9 @@ npm run dev
 
 As variáveis de ambiente utilizadas serão as que estão declaradas no arquivo `.env.docker`.
 
-Atenção ao definir o valor da variável `DATABASE_URL`: O host da URL deve ser o **nome do serviço** declarado nos arquivos `docker-compose.yml` e `docker-compose.migrate.yml`. Ambos os arquivos devem utilizar o mesmo nome para o serviço.
+Atenção ao definir o valor da variável `DATABASE_URL`: O host da URL deve ser o **nome do serviço** declarado no arquivos `docker-compose.yml`.
 
-Ex.: Nos arquivos `docker-compose.yml` e `docker-compose.migrate.yml` foi utilizado o nome `banco_de_dados` como nome do serviço do PostgreSQL. Logo, o valor da variável `DATABASE_URL` deve ser: `postgresql://postgres:postgres@banco_de_dados:5432/saude_bucal_backend?schema=public`. Entenda [redes no docker compose](https://docs.docker.com/compose/networking/).
+Ex.: No arquivo `docker-compose.yml` foi utilizado o nome `banco_de_dados` como nome do serviço do PostgreSQL. Logo, o valor da variável `DATABASE_URL` deve ser: `postgresql://postgres:postgres@banco_de_dados:5432/saude_bucal_backend?schema=public`. Entenda [redes no docker compose](https://docs.docker.com/compose/networking/).
 
 #### Scripts
 
@@ -84,7 +84,7 @@ Para iniciar o servidor utilizando docker, utilize o seguinte comando:
 npm run docker
 ```
 
-PS.: Caso você não tenha o NPM instalado no seu ambiente utilize os seguintes comandos:
+PS.: Caso você não tenha o NPM instalado no seu ambiente utilize o seguintes comando:
 
 Para iniciar o servidor:
 
