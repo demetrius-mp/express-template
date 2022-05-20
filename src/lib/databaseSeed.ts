@@ -9,7 +9,7 @@ async function createUsers() {
   await userService.create({
     email: "admin@admin.com",
     name: "Admin",
-    password: "admin",
+    password: "adminadmin",
   });
 }
 
