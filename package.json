@@ -11,7 +11,10 @@
     "start": "node build/src/index.js",
     "lint": "eslint \"src/**\"",
     "lint:fix": "eslint --fix \"src/**\"",
-    "docker": "docker compose --env-file .env.docker up"
+    "docker": "docker compose --env-file .env.docker up",
+    "docker:db-migrate-dev": "docker exec express_base-web-1 npx prisma migrate dev",
+    "docker:db-seed": "docker exec express_base-web-1 npx prisma db seed",
+    "docker:db-reset": "docker exec express_base-web-1 npx prisma migrate reset --force"
   },
   "prisma": {
     "seed": "ts-node src/lib/databaseSeed.ts"
@@ -43,7 +46,7 @@
     "typescript-transform-paths": "^3.3.1"
   },
   "dependencies": {
-    "@prisma/client": "^3.11.1",
+    "@prisma/client": "^3.14.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",

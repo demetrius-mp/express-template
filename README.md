@@ -66,11 +66,21 @@ Para iniciar o servidor de desenvolzvimento, utilize o seguinte comando:
 npm run dev
 ```
 
-### Ambiente docker (necessário conhecimento básico de networks no docker compose)
+### Ambiente docker (necessário conhecimento básico de docker compose)
 
 #### Configurando variáveis de ambiente
 
 As variáveis de ambiente utilizadas serão as que estão declaradas no arquivo `.env.docker`.
+
+No ambiente docker, existe uma variável de ambiente chamada `COMPOSE_PROJECT_NAME` ([entenda mais](https://docs.docker.com/compose/reference/envvars/#compose_project_name)).
+
+Essa variável é utilizada como prefixo para o nome dos serviços que serão criados no docker compose. O valor padrão dessá variável é igual ao nome do diretório atual. É recomendado definir o valor dessa variável no arquivo `.env.docker` para que os serviços sejam criados com nomes únicos. Ao definir o valor dessa variável (ou utilizar o valor padrão), certifique-se de que os scripts estejam utilizando os nomes corretos.
+
+Ex.: Se o valor de `COMPOSE_PROJECT_NAME` for `my-project`, então o valor padrão dessa variável será `my-project`, portanto, os scripts devem ser alterados para
+
+```
+docker exec my-project-web-1 ...
+```
 
 Atenção ao definir o valor da variável `DATABASE_URL`: O host da URL deve ser o **nome do serviço** declarado no arquivos `docker-compose.yml`.
 
@@ -78,19 +88,53 @@ Ex.: No arquivo `docker-compose.yml` foi utilizado o nome `banco_de_dados` como 
 
 #### Scripts
 
-Para iniciar o servidor utilizando docker, utilize o seguinte comando:
+Para iniciar o servidor utilize o seguinte comando:
 
 ```
 npm run docker
 ```
 
-PS.: Caso você não tenha o NPM instalado no seu ambiente utilize o seguintes comando:
+**Atenção**: Para executar qualquer comando que inicie com `docker:db-*`, é necessário que o serviço `web` esteja ativo (basta executar o comando acima antes de executar qualquer um dos que estão abaixo).
 
-Para iniciar o servidor:
+Para executar as migrações, utilize o seguinte comando:
+
+```
+npm run docker:db-migrate-dev
+```
+
+Para _seedar_ o banco de dados, utilize o seguinte comando:
+
+```
+npm run docker:db-seed
+```
+
+Para resetar o banco de dados, utilize o seguinte comando:
+
+```
+npm run docker:db-reset
+```
+
+PS.: Caso você não tenha o NPM instalado no seu ambiente verifique no arquivo `package.json`, na seção `scripts` qual o comando equivalente ao desejado.
+
+Ex.: Para iniciar o servidor, o comando é `npm run docker`.
+
+Na seção `scripts` do arquivo `package.json` temos o seguinte:
+
+```json
+"scripts": {
+    ...
+    "docker": "docker compose --env-file .env.docker up",
+    ...
+},
+```
+
+Portanto, para iniciar o servidor, basta executar o comando:
 
 ```
 docker compose --env-file .env.docker up
 ```
+
+Também é possível simplesmente acessar o CLI do serviço `web` e executar os comandos necessários.
 
 ### Ambiente de produção
 
