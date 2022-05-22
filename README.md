@@ -233,9 +233,9 @@ Para formatar o código, e corrigir erros encontrados pelo _linter_, utilize o s
 npm run lint:fix
 ```
 
-## Github Workflows
+## Github actions
 
-Para o workflow `Deploy` funcionar, é necessário configurar 3 variáveis de ambiente no github:
+Para a action `Deploy` funcionar, é necessário configurar 3 variáveis de ambiente no github:
 
 `HEROKU_API_KEY`: A chave da API do Heroku. Pode ser obtida no [Heroku](https://dashboard.heroku.com/account) (na seção API Key).
 
@@ -245,7 +245,7 @@ Para o workflow `Deploy` funcionar, é necessário configurar 3 variáveis de am
 
 Para configurar essas variáveis, acesse o repositório no github, e clique em `Settings`, e depois, procure na barra de navegação lateral esquerda a opção `Secrets` > `Actions`. Clique em `New repository secret` e preencha os campos `Name` e `Value`.
 
-O workflow `Deploy` acontece sempre que uma nova release é feita.
+A action `Deploy` acontece sempre que uma nova release é feita.
 
 Entenda [gerenciando releases no Github](https://docs.github.com/pt/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
 
