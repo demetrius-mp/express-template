@@ -3,11 +3,12 @@ import type { RequestHandler } from "express";
 import prisma from "$src/lib/prisma";
 import { authMiddleware, validationMiddleware } from "$src/middlewares";
 import { AuthService, UserService } from "$src/services";
+
 import {
   validateNewTokenBody,
   validateSignInBody,
   validateSignUpBody,
-} from "$src/validators/auth.validator";
+} from "./auth.validator";
 
 type SignUpBody = {
   name: string;
@@ -15,10 +16,7 @@ type SignUpBody = {
   password: string;
 };
 
-const signUp: TypedRequestHandler<SignUpBody, { t: number }> = async (
-  req,
-  res
-) => {
+const signUp: TypedRequestHandler<SignUpBody> = async (req, res) => {
   const { name, email, password } = req.body;
 
   const userService = new UserService(prisma);

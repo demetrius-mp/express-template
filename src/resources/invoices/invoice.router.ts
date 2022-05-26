@@ -1,7 +1,8 @@
 import { Router } from "express";
 
-import { invoiceController } from "$src/controllers";
 import { authMiddleware } from "$src/middlewares";
+
+import * as invoiceController from "./invoice.controller";
 
 const invoiceRouter = Router();
 
