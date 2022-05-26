@@ -1,7 +1,9 @@
-/* eslint-disable max-len */
 import { body, query } from "express-validator";
 
-import { validateIdInParams, validatePageInQuery } from "./common.validator";
+import {
+  validateIdInParams,
+  validatePageInQuery,
+} from "$src/resources/common/validators/common.validator";
 
 export const validateCreateBody = [
   body("title").isString().withMessage("Title must be a string."),

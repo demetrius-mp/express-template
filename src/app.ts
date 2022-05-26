@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 
 import { errorMiddleware } from "$src/middlewares";
-import router from "$src/routers";
+import router from "$src/resources";
 
 export default class App {
   private readonly app: express.Express;

@@ -3,12 +3,13 @@ import type { RequestHandler } from "express";
 
 import prisma from "$src/lib/prisma";
 import { validationMiddleware } from "$src/middlewares";
-import { validateIdInParams } from "$src/validators/common.validator";
+import { validateIdInParams } from "$src/resources/common/validators/common.validator";
+
 import {
   validateCreateBody,
   validateReadManyQuery,
   validateUpdate,
-} from "$src/validators/invoice.validator";
+} from "./invoice.validator";
 
 type CreateBody = Omit<
   Invoice,
